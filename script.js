@@ -12,6 +12,7 @@ const toDoListArr = [];
 const doneList = document.querySelector(".doneList");
 const toDoListTask = {};
 const doneListArr = [];
+let lastButtonPressed = document.querySelector(".lastButtonPressed");
 
 /* Event Listeners */
 document.addEventListener("DOMContentLoaded", function () {
@@ -19,6 +20,45 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 addTaskIcon.addEventListener("click", toggleTaskVisibility);
+
+const filterButtons = document.querySelectorAll(".filter");
+filterButtons.forEach((filterButton) => {
+  filterButton.addEventListener("click", filterList);
+});
+
+function filterList(event) {
+  if (event.target.dataset.status === "all") {
+    showList(toDoListArr, toDoList);
+    lastButtonPressed.dataset.lastButton = "all";
+  } else {
+    let filterNoget;
+    if (event.target.dataset.status === "done") {
+      filterNoget = filterTasksDone;
+      lastButtonPressed.dataset.lastButton = "done";
+    } else {
+      filterNoget = filterTasksNotDone;
+      lastButtonPressed.dataset.lastButton = "notDone";
+    }
+
+    showList(toDoListArr.filter(filterNoget), toDoList);
+  }
+}
+
+function filterTasksDone(task) {
+  if (task.status) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function filterTasksNotDone(task) {
+  if (task.status) {
+    return false;
+  } else {
+    return true;
+  }
+}
 
 formButton.addEventListener("click", () => {
   const inputCategoryContent = formInputCategory.value;
@@ -39,11 +79,13 @@ formInputCategory.addEventListener("change", toggleTaskElements);
 
 function prepareTask(taskCategory, taskName, taskAmount, taskDescription) {
   const task = Object.create(toDoListTask);
+  let newID = toDoListArr.length;
   task.category = taskCategory;
   task.name = taskName;
   task.amount = taskAmount;
   task.description = taskDescription;
   task.status = false;
+  task.id = newID;
   toDoListArr.unshift(task);
 }
 
@@ -88,7 +130,7 @@ function showList(arr, targetElement) {
     targetElement.innerHTML += `<div class="taskContainer">
     <div class="taskElements">
     <div class="taskElementsTop">
-    <input class="checkBox" type="checkbox">
+    <input data-id=${each.id} class="checkBox" type="checkbox">
     <li>${each.name}</li>
     </div>
     <div class="taskElementsBottom">
@@ -117,11 +159,21 @@ function showList(arr, targetElement) {
     deleteButton.addEventListener("click", (event) => {
       const nameToFind = event.target.getAttribute("data-noget");
       const index = toDoListArr.findIndex((task) => task.name === nameToFind);
+      console.log(lastButtonPressed.dataset.status);
       if (index !== -1) {
         toDoListArr.splice(index, 1);
-        showList(toDoListArr, toDoList);
       }
     });
+
+    if (lastButtonPressed.dataset.status === "all") {
+      showList(toDoListArr, toDoList);
+    } else if (lastButtonPressed.dataset.status === "done") {
+      filterNoget = filterTasksDone;
+      showList(toDoListArr.filter(filterNoget), toDoList);
+    } else {
+      filterNoget = filterTasksNotDone;
+      showList(toDoListArr.filter(filterNoget), toDoList);
+    }
   });
 
   const plusButtons = document.querySelectorAll(".plus");
@@ -152,18 +204,16 @@ function showList(arr, targetElement) {
 
   const checkBoxes = document.querySelectorAll(".checkBox");
   checkBoxes.forEach((checkBox) => {
-    checkBox.addEventListener("click", (event) => {
-      const taskToFind = event.target.parentElement.parentElement.querySelector(".delete").getAttribute("data-noget");
-      const index = toDoListArr.findIndex((task) => task.name === taskToFind);
-      const taskToMove = arr.find((task) => task.name === taskToFind);
+    checkBox.addEventListener("change", (event) => {
+      const taskID = parseInt(event.target.getAttribute("data-id"));
+      console.log(taskID);
+      const statusToUpdate = toDoListArr.find((task) => task.id === taskID);
       console.log(checkBox.checked);
-      console.log("hey!");
-
+      console.log(statusToUpdate);
       if (checkBox.checked) {
-        doneListArr.push(taskToMove);
-
-        showList(toDoListArr, toDoList);
-        showList(doneListArr, doneList);
+        statusToUpdate.status = true;
+      } else {
+        statusToUpdate.status = false;
       }
     });
   });
