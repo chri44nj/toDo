@@ -1,4 +1,4 @@
-/* Variables */
+/***** VARIABLES *****/
 const addTaskIcon = document.querySelector(".addTaskIcon");
 const formInputCategory = document.querySelector(".formInputCategory");
 const formInputName = document.querySelector(".formInputName");
@@ -12,9 +12,9 @@ const toDoListArr = [];
 const doneList = document.querySelector(".doneList");
 const toDoListTask = {};
 const doneListArr = [];
-let lastButtonPressed = document.querySelector(".lastButtonPressed");
+let currentFilter = "all";
 
-/* Event Listeners */
+/***** EVENT LISTENERS *****/
 document.addEventListener("DOMContentLoaded", function () {
   toggleTaskElements();
 });
@@ -27,21 +27,21 @@ filterButtons.forEach((filterButton) => {
 });
 
 function filterList(event) {
-  if (event.target.dataset.status === "all") {
-    showList(toDoListArr, toDoList);
-    lastButtonPressed.dataset.lastButton = "all";
-  } else {
-    let filterNoget;
-    if (event.target.dataset.status === "done") {
-      filterNoget = filterTasksDone;
-      lastButtonPressed.dataset.lastButton = "done";
-    } else {
-      filterNoget = filterTasksNotDone;
-      lastButtonPressed.dataset.lastButton = "notDone";
-    }
+  currentFilter = event.target.dataset.status;
+  showFilteredTaskList();
+}
 
-    showList(toDoListArr.filter(filterNoget), toDoList);
+function showFilteredTaskList() {
+  let filteredTasks;
+  if (currentFilter === "all") {
+    filteredTasks = toDoListArr;
+  } else if (currentFilter === "done") {
+    filteredTasks = toDoListArr.filter(filterTasksDone);
+  } else {
+    filteredTasks = toDoListArr.filter(filterTasksNotDone);
   }
+
+  showList(filteredTasks, toDoList);
 }
 
 function filterTasksDone(task) {
@@ -75,7 +75,7 @@ formButton.addEventListener("click", () => {
 
 formInputCategory.addEventListener("change", toggleTaskElements);
 
-/* Functions */
+/***** FUNCTIONS *****/
 
 function prepareTask(taskCategory, taskName, taskAmount, taskDescription) {
   const task = Object.create(toDoListTask);
@@ -130,7 +130,7 @@ function showList(arr, targetElement) {
     targetElement.innerHTML += `<div class="taskContainer">
     <div class="taskElements">
     <div class="taskElementsTop">
-    <input data-id=${each.id} class="checkBox" type="checkbox">
+    <input data-id=${each.id} class="checkBox" type="checkbox" ${each.status ? "checked" : ""}>
     <li>${each.name}</li>
     </div>
     <div class="taskElementsBottom">
@@ -159,10 +159,9 @@ function showList(arr, targetElement) {
     deleteButton.addEventListener("click", (event) => {
       const nameToFind = event.target.getAttribute("data-noget");
       const index = toDoListArr.findIndex((task) => task.name === nameToFind);
-      console.log(lastButtonPressed.dataset.status);
       if (index !== -1) {
         toDoListArr.splice(index, 1);
-        showList(toDoListArr, toDoList);
+        showFilteredTaskList();
       }
     });
   });
@@ -175,7 +174,7 @@ function showList(arr, targetElement) {
 
       if (taskToUpdate) {
         taskToUpdate.amount = parseInt(taskToUpdate.amount) + 1;
-        showList(toDoListArr, toDoList);
+        showFilteredTaskList();
       }
     });
   });
@@ -188,7 +187,7 @@ function showList(arr, targetElement) {
 
       if (taskToUpdate) {
         taskToUpdate.amount = parseInt(taskToUpdate.amount) - 1;
-        showList(toDoListArr, toDoList);
+        showFilteredTaskList();
       }
     });
   });
