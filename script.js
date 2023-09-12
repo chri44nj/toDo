@@ -162,18 +162,9 @@ function showList(arr, targetElement) {
       console.log(lastButtonPressed.dataset.status);
       if (index !== -1) {
         toDoListArr.splice(index, 1);
+        showList(toDoListArr, toDoList);
       }
     });
-
-    if (lastButtonPressed.dataset.status === "all") {
-      showList(toDoListArr, toDoList);
-    } else if (lastButtonPressed.dataset.status === "done") {
-      filterNoget = filterTasksDone;
-      showList(toDoListArr.filter(filterNoget), toDoList);
-    } else {
-      filterNoget = filterTasksNotDone;
-      showList(toDoListArr.filter(filterNoget), toDoList);
-    }
   });
 
   const plusButtons = document.querySelectorAll(".plus");
