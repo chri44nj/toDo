@@ -10,6 +10,10 @@ const formInputAmount = document.querySelector(".formInputAmount");
 const formInputAmountParagraph = document.querySelector(".formInputAmountParagraph");
 const formButton = document.querySelector(".formButton");
 const toDoList = document.querySelector(".toDoList");
+const hellYeahSound = document.querySelector("#hellYeahSound");
+const deleteSound = document.querySelector("#deleteSound");
+const paperSound = document.querySelector("#paperSound");
+
 let toDoListArr = [];
 let currentFilter = "notDone";
 let currentHeading;
@@ -142,6 +146,8 @@ function prepareTask(taskCategory, taskName, taskAmount, taskDescription) {
   toDoListArr.unshift(task);
   const form = document.querySelector(".form");
   form.classList.add("disappear3");
+  paperSound.currentTime = 0;
+  paperSound.play();
   mainContent.style.filter = "blur(0px)";
   addTaskIcon.innerHTML = '<i class="fa-solid fa-circle-plus"></i>';
   setTimeout(() => {
@@ -185,6 +191,8 @@ function showList(arr, targetElement) {
   const deleteButtons = document.querySelectorAll(".delete");
   deleteButtons.forEach((deleteButton) => {
     deleteButton.addEventListener("click", (event) => {
+      deleteSound.currentTime = 0;
+      deleteSound.play();
       const idToFind = event.target.getAttribute("data-delete");
       const index = toDoListArr.findIndex((task) => task.id == idToFind);
       if (index !== -1) {
@@ -233,15 +241,27 @@ function showList(arr, targetElement) {
         statusToUpdate.status = true;
         if (currentFilter === "notDone") {
           taskContainer.classList.add("disappear");
+          paperSound.currentTime = 0;
+          paperSound.play();
+          hellYeahSound.currentTime = 0;
+          hellYeahSound.play();
         } else if (currentFilter === "done") {
           taskContainer.classList.add("disappear2");
+          paperSound.currentTime = 0;
+          paperSound.play();
         }
       } else {
         statusToUpdate.status = false;
         if (currentFilter === "notDone") {
           taskContainer.classList.add("disappear");
+          paperSound.currentTime = 0;
+          paperSound.play();
+          hellYeahSound.currentTime = 0;
+          hellYeahSound.play();
         } else if (currentFilter === "done") {
           taskContainer.classList.add("disappear2");
+          paperSound.currentTime = 0;
+          paperSound.play();
         }
       }
 
