@@ -146,8 +146,7 @@ function prepareTask(taskCategory, taskName, taskAmount, taskDescription) {
   toDoListArr.unshift(task);
   const form = document.querySelector(".form");
   form.classList.add("disappear3");
-  paperSound.currentTime = 0;
-  paperSound.play();
+  playPaperSound();
   mainContent.style.filter = "blur(0px)";
   addTaskIcon.innerHTML = '<i class="fa-solid fa-circle-plus"></i>';
   setTimeout(() => {
@@ -191,8 +190,7 @@ function showList(arr, targetElement) {
   const deleteButtons = document.querySelectorAll(".delete");
   deleteButtons.forEach((deleteButton) => {
     deleteButton.addEventListener("click", (event) => {
-      deleteSound.currentTime = 0;
-      deleteSound.play();
+      playDeleteSound();
       const idToFind = event.target.getAttribute("data-delete");
       const index = toDoListArr.findIndex((task) => task.id == idToFind);
       if (index !== -1) {
@@ -241,27 +239,21 @@ function showList(arr, targetElement) {
         statusToUpdate.status = true;
         if (currentFilter === "notDone") {
           taskContainer.classList.add("disappear");
-          paperSound.currentTime = 0;
-          paperSound.play();
-          hellYeahSound.currentTime = 0;
-          hellYeahSound.play();
+          playPaperSound();
+          playHellYeahSound();
         } else if (currentFilter === "done") {
           taskContainer.classList.add("disappear2");
-          paperSound.currentTime = 0;
-          paperSound.play();
+          playPaperSound();
         }
       } else {
         statusToUpdate.status = false;
         if (currentFilter === "notDone") {
           taskContainer.classList.add("disappear");
-          paperSound.currentTime = 0;
-          paperSound.play();
-          hellYeahSound.currentTime = 0;
-          hellYeahSound.play();
+          playPaperSound();
+          playHellYeahSound();
         } else if (currentFilter === "done") {
           taskContainer.classList.add("disappear2");
-          paperSound.currentTime = 0;
-          paperSound.play();
+          playPaperSound();
         }
       }
 
@@ -276,6 +268,21 @@ function showList(arr, targetElement) {
 
 function setStorage() {
   localStorage.setItem("Key", JSON.stringify(toDoListArr));
+}
+
+function playDeleteSound() {
+  deleteSound.currentTime = 0;
+  deleteSound.play();
+}
+
+function playPaperSound() {
+  paperSound.currentTime = 0;
+  paperSound.play();
+}
+
+function playHellYeahSound() {
+  hellYeahSound.currentTime = 0;
+  hellYeahSound.play();
 }
 
 if (currentFilter === "all") {
