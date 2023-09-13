@@ -9,53 +9,57 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Just+Another+Hand&display=swap" rel="stylesheet">
-    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+    <title>To-Do List</title>
 </head>
 
 
 <body>
-    <header></header>
-
-
-    <main>
-
-        <div class="topMenu">
-            <div class="addTaskIcon">
-                <i class="fas fa-plus"></i>
-            </div>
-
-            <div data-lastButton="" class="lastButtonPressed">
-                <button data-status="done" class="filter done">Done</button>
-                <button data-status="notDone" class="filter notDone">Not Done</button>
-                <button data-status="all" class="filter all">All</button>
-            </div>
+    <header>
+        <div class="addTaskIcon">
+            <i class="fa-solid fa-circle-plus"></i>
         </div>
-
-        <div class="lists">
-            <ul class="toDoList"></ul>
-            <ul class="doneList"></ul>
+        <div class="filterButtons">
+            <button data-status="notDone" class="filter notDone activeButton">Not Done</button>
+            <button data-status="done" class="filter done">Done</button>
+            <button data-status="all" class="filter all">All</button>
         </div>
 
         <div class="form">
-            <p class="formText">Task-Adder-5000</p>
+            <h2 class="formText">Task-Adder-5000</h2>
+            <div>
+                <p>Category</p>
+                <select class="formInputCategory">
+                    <option value="string">Text</option>
+                    <option value="value">Value</option>
+                    <option value="stringValue">Text + Value</option>
+                </select>
+            </div>
 
-            <p>Category</p>
-            <select class="formInputCategory">
-                <option value="string">String</option>
-                <option value="value">Value</option>
-                <option value="stringValue">String + Value</option>
-            </select>
-
-            <p>Name</p>
-            <input class="formInputName" type="text">
-
-            <p class="formInputDescriptionParagraph">Description</p>
-            <input class="formInputDescription" type="text">
-
-            <p class="formInputAmountParagraph">Amount</p>
-            <input class="formInputAmount" type="number">
+            <div>
+                <p>Name</p>
+                <input class="formInputName" type="text">
+            </div>
+            <div class="formDescription">
+                <p class="formInputDescriptionParagraph">Description</p>
+                <!-- <input class="formInputDescription" type="text"> -->
+                <textarea class="formInputDescription" rows="2"></textarea>
+            </div>
+            <div class="formAmount">
+                <p class="formInputAmountParagraph">Amount</p>
+                <input class="formInputAmount" type="number">
+            </div>
 
             <button class="formButton">Add task</button>
+        </div>
+    </header>
+
+
+    <main>
+        <div class="lists">
+            <ul class="toDoList"></ul>
         </div>
     </main>
 

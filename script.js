@@ -1,21 +1,37 @@
 /***** VARIABLES *****/
+const mainContent = document.querySelector("main");
 const addTaskIcon = document.querySelector(".addTaskIcon");
 const formInputCategory = document.querySelector(".formInputCategory");
 const formInputName = document.querySelector(".formInputName");
+const formDescription = document.querySelector(".formDescription");
 const formInputDescription = document.querySelector(".formInputDescription");
 const formInputDescriptionParagraph = document.querySelector(".formInputDescriptionParagraph");
+const formAmount = document.querySelector(".formAmount");
 const formInputAmount = document.querySelector(".formInputAmount");
 const formInputAmountParagraph = document.querySelector(".formInputAmountParagraph");
 const formButton = document.querySelector(".formButton");
 const toDoList = document.querySelector(".toDoList");
-const toDoListArr = [];
-const doneList = document.querySelector(".doneList");
+let toDoListArr = [];
 const toDoListTask = {};
-const doneListArr = [];
-let currentFilter = "all";
+const ls = localStorage.getItem("Key");
+if (ls !== null) {
+  toDoListArr = JSON.parse(ls);
+}
+window.addEventListener("load", () => {
+  showFilteredTaskList();
+});
+let currentFilter = "notDone";
+let currentHeading;
 
 /***** EVENT LISTENERS *****/
 document.addEventListener("DOMContentLoaded", function () {
+  const form = document.querySelector(".form");
+  if (form.style.display === "flex") {
+    form.style.display = "none";
+    addTaskIcon.innerHTML = ' <i class="fa-solid fa-circle-plus"></i>';
+  } else {
+    form.style.display = "none";
+  }
   toggleTaskElements();
 });
 
@@ -26,8 +42,32 @@ filterButtons.forEach((filterButton) => {
   filterButton.addEventListener("click", filterList);
 });
 
+formButton.addEventListener("click", () => {
+  const inputCategoryContent = formInputCategory.value;
+  const inputNameContent = formInputName.value;
+  const inputAmountContent = formInputAmount.value;
+  const inputDescriptionContent = formInputDescription.value;
+  prepareTask(inputCategoryContent, inputNameContent, inputAmountContent, inputDescriptionContent);
+  showFilteredTaskList();
+  formInputName.value = "";
+  formInputAmount.value = "";
+  formInputDescription.value = "";
+  toggleTaskVisibility();
+  setStorage();
+});
+
+formInputCategory.addEventListener("change", toggleTaskElements);
+
+/***** FUNCTIONS *****/
+
 function filterList(event) {
   currentFilter = event.target.dataset.status;
+  const currentButton = event.target;
+  filterButtons.forEach((filterButton) => {
+    filterButton.classList.remove("activeButton");
+  });
+  currentButton.classList.add("activeButton");
+
   showFilteredTaskList();
 }
 
@@ -35,13 +75,17 @@ function showFilteredTaskList() {
   let filteredTasks;
   if (currentFilter === "all") {
     filteredTasks = toDoListArr;
+    currentHeading = "All tasks";
   } else if (currentFilter === "done") {
     filteredTasks = toDoListArr.filter(filterTasksDone);
+    currentHeading = "Completed tasks";
   } else {
     filteredTasks = toDoListArr.filter(filterTasksNotDone);
+    currentHeading = "To-Do tasks";
   }
 
   showList(filteredTasks, toDoList);
+  setStorage();
 }
 
 function filterTasksDone(task) {
@@ -60,33 +104,17 @@ function filterTasksNotDone(task) {
   }
 }
 
-formButton.addEventListener("click", () => {
-  const inputCategoryContent = formInputCategory.value;
-  const inputNameContent = formInputName.value;
-  const inputAmountContent = formInputAmount.value;
-  const inputDescriptionContent = formInputDescription.value;
-  prepareTask(inputCategoryContent, inputNameContent, inputAmountContent, inputDescriptionContent);
-  showList(toDoListArr, toDoList);
-  formInputName.value = "";
-  formInputAmount.value = "";
-  formInputDescription.value = "";
-  toggleTaskVisibility();
-});
-
-formInputCategory.addEventListener("change", toggleTaskElements);
-
-/***** FUNCTIONS *****/
-
 function prepareTask(taskCategory, taskName, taskAmount, taskDescription) {
   const task = Object.create(toDoListTask);
   let newID = toDoListArr.length;
+  task.id = newID;
   task.category = taskCategory;
   task.name = taskName;
   task.amount = taskAmount;
   task.description = taskDescription;
   task.status = false;
-  task.id = newID;
   toDoListArr.unshift(task);
+  setStorage();
 }
 
 function toggleTaskVisibility() {
@@ -94,10 +122,16 @@ function toggleTaskVisibility() {
 
   if (form.style.display === "none" || form.style.display === "") {
     form.style.display = "flex";
-    addTaskIcon.innerHTML = '<i class="fas fa-minus"></i>';
+    mainContent.style.filter = "blur(2px)";
+    addTaskIcon.innerHTML = '<i class="fa-solid fa-circle-minus"></i>';
   } else {
-    form.style.display = "none";
-    addTaskIcon.innerHTML = '<i class="fas fa-plus"></i>';
+    form.classList.add("disappear");
+    mainContent.style.filter = "blur(0px)";
+    setTimeout(() => {
+      form.style.display = "none";
+      addTaskIcon.innerHTML = '<i class="fa-solid fa-circle-plus"></i>';
+      form.classList.remove("disappear");
+    }, 700);
   }
 }
 
@@ -105,63 +139,58 @@ function toggleTaskElements() {
   const selectedCategory = formInputCategory.value;
 
   if (selectedCategory === "value" || selectedCategory === "stringValue") {
-    formInputAmount.style.display = "block";
-    formInputAmountParagraph.style.display = "block";
+    formAmount.style.display = "block";
   } else {
-    formInputAmount.style.display = "none";
-    formInputAmountParagraph.style.display = "none";
+    formAmount.style.display = "none";
   }
 
   if (selectedCategory === "string" || selectedCategory === "stringValue") {
-    formInputDescription.style.display = "block";
-    formInputDescriptionParagraph.style.display = "block";
+    formDescription.style.display = "block";
   } else {
-    formInputDescription.style.display = "none";
-    formInputDescriptionParagraph.style.display = "none";
+    formDescription.style.display = "none";
   }
 }
 
 function showList(arr, targetElement) {
   targetElement.innerHTML = "";
-  if (arr.length > 0) {
-    targetElement.innerHTML = `<h2 class="toDoHeading">To-Do List</h2>`;
+  if (arr.length >= 0) {
+    targetElement.innerHTML = `<h2 class="toDoHeading">${currentHeading}</h2>`;
   }
   arr.forEach((each) => {
     targetElement.innerHTML += `<div class="taskContainer">
     <div class="taskElements">
     <div class="taskElementsTop">
-    <input data-id=${each.id} class="checkBox" type="checkbox" ${each.status ? "checked" : ""}>
+    <input data-checkBox=${each.id} class="checkBox" type="checkbox" ${each.status ? "checked" : ""}>
     <li>${each.name}</li>
     </div>
-    <div class="taskElementsBottom">
-    <i data-noget="${each.name}" class="fa-solid fa-circle-xmark delete"></i>
+    <i data-delete="${each.id}" class="fa-solid fa-circle-xmark delete"></i>
     </div>
-    </div>
+
      ${
        each.category === "value" || each.category === "stringValue"
          ? `
     <div class="taskValues">
-      <i class="fa-solid fa-circle-minus minus"></i>
+      <i data-minus="${each.id}" class="fa-solid fa-circle-minus minus"></i>
       <li class="taskAmount">${each.amount || "N/A"}</li>
-      <i class="fa-solid fa-circle-plus plus"></i>
+      <i data-plus="${each.id}" class="fa-solid fa-circle-plus plus"></i>
        </div>
     `
          : ""
      }
-    <div class="taskDescription">
-    <p>${each.description}</p>
-    </div>
+    <p class="taskDescription">${each.description}</p>
     </div>`;
+    setStorage();
   });
 
   const deleteButtons = document.querySelectorAll(".delete");
   deleteButtons.forEach((deleteButton) => {
     deleteButton.addEventListener("click", (event) => {
-      const nameToFind = event.target.getAttribute("data-noget");
-      const index = toDoListArr.findIndex((task) => task.name === nameToFind);
+      const idToFind = event.target.getAttribute("data-delete");
+      const index = toDoListArr.findIndex((task) => task.id == idToFind);
       if (index !== -1) {
         toDoListArr.splice(index, 1);
         showFilteredTaskList();
+        setStorage();
       }
     });
   });
@@ -169,12 +198,13 @@ function showList(arr, targetElement) {
   const plusButtons = document.querySelectorAll(".plus");
   plusButtons.forEach((plusButton) => {
     plusButton.addEventListener("click", (event) => {
-      const nameToFind = event.target.parentElement.parentElement.querySelector(".delete").getAttribute("data-noget");
-      const taskToUpdate = arr.find((task) => task.name === nameToFind);
+      const idToFind = event.target.getAttribute("data-plus");
+      const taskToUpdate = arr.find((task) => task.id == idToFind);
 
       if (taskToUpdate) {
         taskToUpdate.amount = parseInt(taskToUpdate.amount) + 1;
         showFilteredTaskList();
+        setStorage();
       }
     });
   });
@@ -182,12 +212,13 @@ function showList(arr, targetElement) {
   const minusButtons = document.querySelectorAll(".minus");
   minusButtons.forEach((minusButton) => {
     minusButton.addEventListener("click", (event) => {
-      const nameToFind = event.target.parentElement.parentElement.querySelector(".delete").getAttribute("data-noget");
-      const taskToUpdate = arr.find((task) => task.name === nameToFind);
+      const idToFind = event.target.getAttribute("data-minus");
+      const taskToUpdate = arr.find((task) => task.id == idToFind);
 
       if (taskToUpdate) {
         taskToUpdate.amount = parseInt(taskToUpdate.amount) - 1;
         showFilteredTaskList();
+        setStorage();
       }
     });
   });
@@ -195,51 +226,19 @@ function showList(arr, targetElement) {
   const checkBoxes = document.querySelectorAll(".checkBox");
   checkBoxes.forEach((checkBox) => {
     checkBox.addEventListener("change", (event) => {
-      const taskID = parseInt(event.target.getAttribute("data-id"));
-      console.log(taskID);
+      const taskID = parseInt(event.target.getAttribute("data-checkBox"));
       const statusToUpdate = toDoListArr.find((task) => task.id === taskID);
-      console.log(checkBox.checked);
-      console.log(statusToUpdate);
       if (checkBox.checked) {
         statusToUpdate.status = true;
       } else {
         statusToUpdate.status = false;
       }
+      showFilteredTaskList();
+      setStorage();
     });
   });
 }
 
-/* Todo-task’en skal være kompleks og objektet skal indeholde mindst disse properties:
-
-Task-string - hvad er der skal gøres/købes
-Hvor mange - hvis det er et indkøb
-done - er indkøbet udført / er tasken done
-ID
-
-
-Minimumskrav
-Din ToDo-app skal være i stand til at:
-
-Oprette en ny opgave med et unikt ID og en beskrivelse.
-- createElement / appendChild
-Gemme mere end en simpel streng for hver opgave for at øge kompleksiteten. Dette kunne være kvantitet (antal) eller anden relevant information.
-Tillade brugerne at markere opgaver som "færdige", hvorefter de flyttes til en "Færdig"-liste.
-- boolean / if-statements
-Tillade brugerne at fortryde færdiggørelsen af en opgave, så den ryger tilbage til "ToDo"-listen.
-- boolean / if-statements
-Tillade brugerne at slette opgaver.
-- remove/delete
-
-
-Evt. ekstra funktioner
-Brug localStorage til at gemme opgaverne. Når en bruger opretter en ny opgave, sletter en opgave, eller ændrer status for en opgave, 
-skal disse ændringer gemmes i localStorage. Når brugeren besøger appen igen, skal opgaverne hentes fra localStorage, 
-så de stadig kan se deres opgaveliste, selv efter at de har lukket og genåbnet browseren.
-
-- Inputfield med tilhørende knap
-- Tomt array (med objekter i)
-- Displayfunktion
-- +/- der opdaterer en let der holder styr på antal af varen
-- done / ikke done knap
-
-*/
+function setStorage() {
+  localStorage.setItem("Key", JSON.stringify(toDoListArr));
+}

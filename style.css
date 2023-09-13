@@ -4,39 +4,103 @@
   box-sizing: border-box;
 }
 
-.topMenu {
+h2 {
+  color: white;
+  font-size: 2rem;
+  background-color: rgba(224, 109, 6);
+  text-transform: uppercase;
+  font-family: "Just Another Hand", cursive;
+}
+
+header {
   display: flex;
+  align-items: center;
+  margin: 1rem;
+  position: fixed;
+  z-index: 1;
 }
 
 .addTaskIcon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 50px;
-  height: 50px;
-  background-color: #2d8fff;
-  border-radius: 50%;
-  color: white;
-  font-size: 24px;
+  color: rgba(224, 109, 6);
+  font-size: 3.5rem;
   cursor: pointer;
-  z-index: 2;
   opacity: 80%;
+  z-index: 3;
 }
 
 .addTaskIcon:hover {
   opacity: 100%;
 }
 
-.form {
-  display: none;
-  flex-direction: column;
+.filterButtons {
+  display: flex;
+  justify-content: center;
   align-items: center;
   gap: 0.5rem;
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 2;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  background-color: #07beb8;
+  color: white;
+  border-radius: 5px;
+  border: none;
+  font-family: "Lato", sans-serif;
+}
+
+button:hover {
+  background-color: #00a6a0;
+}
+
+.activeButton {
+  background-color: rgba(224, 109, 6);
+  opacity: 80%;
+}
+
+.activeButton:hover {
+  background-color: rgba(224, 109, 6);
+  opacity: 100%;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.75rem;
+  background-color: rgba(224, 109, 6, 0.98);
+  color: white;
+  position: fixed;
+  top: 15%;
+  left: 20%;
+  right: 20%;
+  bottom: 25%;
+  z-index: 2;
+  border-radius: 10px;
+  font-family: "Lato", sans-serif;
+}
+
+.form p {
+  margin-bottom: 0.2rem;
 }
 
 .formInputCategory {
   padding: 0.5rem 1rem;
   cursor: pointer;
+  background-color: #07beb8;
+  color: white;
+  border-radius: 5px;
+  border: none;
+}
+
+.formInputCategory:hover {
+  background-color: #00a6a0;
 }
 
 .formText {
@@ -44,8 +108,7 @@
 }
 
 .formButton {
-  padding: 0.5rem 1rem;
-  cursor: pointer;
+  margin-top: 0.5rem;
 }
 
 .lists {
@@ -55,25 +118,21 @@
 }
 
 .toDoHeading {
-  color: #2d8fff;
-  background-color: rgb(0, 0, 0);
   padding: 1rem 2rem;
   width: 50vw;
   text-align: center;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  text-transform: uppercase;
 }
 
-.toDoList,
-.doneList {
+.toDoList {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
   list-style: none;
   gap: 1rem;
-  margin-top: 1rem;
+  margin-top: 8rem;
   font-family: "Just Another Hand", cursive;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
@@ -87,7 +146,7 @@
   gap: 0.5rem;
   width: 100%;
   background-color: #eef4fb;
-  border-radius: 10px;
+  border-radius: 5px;
   padding: 0.5rem;
 }
 
@@ -97,18 +156,12 @@
   align-items: center;
   gap: 1rem;
   font-size: 2rem;
-  color: #2d8fff;
+  color: #07beb8;
 }
 
 .taskElementsTop {
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.taskElementsBottom {
-  display: flex;
   align-items: center;
   gap: 0.5rem;
 }
@@ -137,7 +190,7 @@
 
 .taskAmount {
   font-size: 2rem;
-  color: #2d8fff;
+  color: #07beb8;
 }
 
 .delete,
@@ -155,7 +208,7 @@
 
 .delete {
   color: #e01a4f;
-  opacity: 80%;
+  opacity: 75%;
 }
 
 .delete:hover {
@@ -164,5 +217,22 @@
 
 .minus:hover,
 .plus:hover {
-  color: #2d8fff;
+  color: #07beb8;
+}
+
+/* ANIMATIONS */
+
+.disappear {
+  animation-name: disappear;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes disappear {
+  0% {
+  }
+
+  100% {
+    transform: translate(300%, 0);
+  }
 }
