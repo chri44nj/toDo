@@ -5,9 +5,7 @@
 }
 
 h2 {
-  color: white;
   font-size: 2rem;
-  background-color: rgba(224, 109, 6);
   text-transform: uppercase;
   font-family: "Just Another Hand", cursive;
 }
@@ -44,6 +42,7 @@ header {
 }
 
 button {
+  font-size: 1.25rem;
   padding: 0.5rem 1rem;
   cursor: pointer;
   background-color: #07beb8;
@@ -73,7 +72,7 @@ button:hover {
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: 0.75rem;
+  gap: 1rem;
   background-color: rgba(224, 109, 6, 0.98);
   color: white;
   position: fixed;
@@ -86,21 +85,29 @@ button:hover {
   font-family: "Lato", sans-serif;
 }
 
+input,
+textarea,
+select {
+  padding: 0.25rem 1rem;
+  background-color: white;
+  border-radius: 5px;
+  border: none;
+  width: 20vw;
+  text-align: center;
+  font-size: 1rem;
+}
+
 .form p {
   margin-bottom: 0.2rem;
+  font-weight: bold;
 }
 
 .formInputCategory {
-  padding: 0.5rem 1rem;
   cursor: pointer;
-  background-color: #07beb8;
-  color: white;
-  border-radius: 5px;
-  border: none;
 }
 
 .formInputCategory:hover {
-  background-color: #00a6a0;
+  opacity: 0.8;
 }
 
 .formText {
@@ -118,6 +125,8 @@ button:hover {
 }
 
 .toDoHeading {
+  color: #07beb8;
+  background-color: rgb(0, 0, 0);
   padding: 1rem 2rem;
   width: 50vw;
   text-align: center;
@@ -181,7 +190,6 @@ button:hover {
 .checkBox {
   width: 25px;
   height: 25px;
-  background: rebeccapurple;
 }
 
 .checkBox:hover {
@@ -237,14 +245,88 @@ button:hover {
   }
 }
 
+.disappear2 {
+  animation-name: disappear2;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes disappear2 {
+  0% {
+  }
+
+  100% {
+    transform: translate(-300%, 0);
+  }
+}
+
+.disappear {
+  animation-name: disappear;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes disappear {
+  0% {
+  }
+
+  100% {
+    transform: translate(300%, 0);
+  }
+}
+
+.disappear3 {
+  animation-name: disappear3;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes disappear3 {
+  0% {
+  }
+
+  100% {
+    transform: translate(0, 300%);
+  }
+}
+
 /* MOBILE */
 
 @media (max-width: 855px) {
   h2 {
-    font-size: 1rem;
+    font-size: 1.5rem;
   }
 
   .addTaskIcon {
-    font-size: 2.5rem;
+    font-size: 3rem;
+  }
+
+  .toDoList {
+    margin-top: 5rem;
+  }
+
+  .toDoHeading {
+    width: 95vw;
+  }
+
+  button {
+    font-size: 0.9rem;
+  }
+
+  .taskAmount {
+    font-size: 1.5rem;
+  }
+
+  .form {
+    top: 15%;
+    left: 10%;
+    right: 10%;
+    bottom: 25%;
+  }
+
+  input,
+  textarea,
+  select {
+    width: 50vw;
   }
 }
