@@ -127,9 +127,10 @@ function toggleTaskVisibility() {
   } else {
     form.classList.add("disappear");
     mainContent.style.filter = "blur(0px)";
+    addTaskIcon.innerHTML = '<i class="fa-solid fa-circle-plus"></i>';
     setTimeout(() => {
       form.style.display = "none";
-      addTaskIcon.innerHTML = '<i class="fa-solid fa-circle-plus"></i>';
+
       form.classList.remove("disappear");
     }, 700);
   }
