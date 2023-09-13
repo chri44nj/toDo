@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+body {
+  background-color: #5e6a76;
+}
+
 h2 {
   font-size: 2rem;
   text-transform: uppercase;
@@ -184,7 +188,7 @@ select {
 
 .taskDescription {
   font-size: 2rem;
-  color: #a0a0a0;
+  color: #5e6a76;
 }
 
 .checkBox {

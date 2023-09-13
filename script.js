@@ -228,7 +228,6 @@ function showList(arr, targetElement) {
     checkBox.addEventListener("change", (event) => {
       const taskID = parseInt(event.target.getAttribute("data-checkBox"));
       const taskContainer = event.target.parentElement.parentElement.parentElement;
-      console.log(taskContainer);
       const statusToUpdate = toDoListArr.find((task) => task.id === taskID);
       if (checkBox.checked) {
         statusToUpdate.status = true;
