@@ -17,7 +17,7 @@ h2 {
 header {
   display: flex;
   align-items: center;
-  margin: 1rem;
+  margin: 1.5rem;
   position: fixed;
   z-index: 1;
 }
@@ -305,8 +305,13 @@ select {
     font-size: 3rem;
   }
 
+  .filterButtons {
+    left: auto;
+    right: 1.5rem;
+  }
+
   .toDoList {
-    margin-top: 5rem;
+    margin-top: 6rem;
   }
 
   .toDoHeading {
