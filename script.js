@@ -237,10 +237,10 @@ function showList(arr, targetElement) {
       const statusToUpdate = toDoListArr.find((task) => task.id === taskID);
       if (checkBox.checked) {
         statusToUpdate.status = true;
+        playHellYeahSound();
         if (currentFilter === "notDone") {
           taskContainer.classList.add("disappear");
           playPaperSound();
-          playHellYeahSound();
         } else if (currentFilter === "done") {
           taskContainer.classList.add("disappear2");
           playPaperSound();
@@ -250,7 +250,6 @@ function showList(arr, targetElement) {
         if (currentFilter === "notDone") {
           taskContainer.classList.add("disappear");
           playPaperSound();
-          playHellYeahSound();
         } else if (currentFilter === "done") {
           taskContainer.classList.add("disappear2");
           playPaperSound();
