@@ -54,20 +54,23 @@ button {
   border-radius: 5px;
   border: none;
   font-family: "Lato", sans-serif;
+  opacity: 80%;
+  font-weight: bold;
 }
 
 button:hover {
-  background-color: #00a6a0;
+  opacity: 100%;
+  color: black;
 }
 
 .activeButton {
   background-color: rgba(224, 109, 6);
-  opacity: 80%;
+  opacity: 100%;
+  color: black;
 }
 
 .activeButton:hover {
   background-color: rgba(224, 109, 6);
-  opacity: 100%;
 }
 
 .form {
@@ -89,6 +92,10 @@ button:hover {
   font-family: "Lato", sans-serif;
 }
 
+.form button {
+  opacity: 100%;
+}
+
 input,
 textarea,
 select {
@@ -99,6 +106,7 @@ select {
   width: 20vw;
   text-align: center;
   font-size: 1rem;
+  font-family: "Lato", sans-serif;
 }
 
 .form p {
@@ -129,7 +137,7 @@ select {
 }
 
 .toDoHeading {
-  color: #07beb8;
+  color: rgba(224, 109, 6);
   background-color: rgb(0, 0, 0);
   padding: 1rem 2rem;
   width: 50vw;

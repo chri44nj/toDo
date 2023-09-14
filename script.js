@@ -10,9 +10,6 @@ const formInputAmount = document.querySelector(".formInputAmount");
 const formInputAmountParagraph = document.querySelector(".formInputAmountParagraph");
 const formButton = document.querySelector(".formButton");
 const toDoList = document.querySelector(".toDoList");
-const hellYeahSound = document.querySelector("#hellYeahSound");
-const deleteSound = document.querySelector("#deleteSound");
-const paperSound = document.querySelector("#paperSound");
 
 let toDoListArr = [];
 let currentFilter = "notDone";
@@ -64,10 +61,12 @@ function toggleTaskVisibility() {
     form.style.display = "flex";
     mainContent.style.filter = "blur(2px)";
     addTaskIcon.innerHTML = '<i class="fa-solid fa-circle-minus"></i>';
+    playPopOpenSound();
   } else {
     mainContent.style.filter = "blur(0px)";
     addTaskIcon.innerHTML = '<i class="fa-solid fa-circle-plus"></i>';
     form.style.display = "none";
+    playPopCloseSound();
   }
 }
 
@@ -77,13 +76,13 @@ filterButtons.forEach((filterButton) => {
 });
 
 function filterList(event) {
+  playFilterSound();
   currentFilter = event.target.dataset.status;
   const currentButton = event.target;
   filterButtons.forEach((filterButton) => {
     filterButton.classList.remove("activeButton");
   });
   currentButton.classList.add("activeButton");
-
   showFilteredTaskList();
 }
 
@@ -265,9 +264,23 @@ function showList(arr, targetElement) {
   });
 }
 
+if (currentFilter === "all") {
+  taskContainer.classList.add("disappear");
+}
+
 function setStorage() {
   localStorage.setItem("Key", JSON.stringify(toDoListArr));
 }
+
+/* SOUNDS */
+
+const hellYeahSound = document.querySelector("#hellYeahSound");
+const deleteSound = document.querySelector("#deleteSound");
+const paperSound = document.querySelector("#paperSound");
+const succesSound = document.querySelector("#succesSound");
+const popOpenSound = document.querySelector("#popOpenSound");
+const popCloseSound = document.querySelector("#popCloseSound");
+const filterSound = document.querySelector("#filterSound");
 
 function playDeleteSound() {
   deleteSound.currentTime = 0;
@@ -284,6 +297,25 @@ function playHellYeahSound() {
   hellYeahSound.play();
 }
 
-if (currentFilter === "all") {
-  taskContainer.classList.add("disappear");
+function playSuccesSound() {
+  succesSound.currentTime = 0;
+  succesSound.play();
+}
+
+function playPopOpenSound() {
+  popOpenSound.currentTime = 0;
+  popOpenSound.play();
+  popOpenSound.volume = 0.05;
+}
+
+function playPopCloseSound() {
+  popCloseSound.currentTime = 0;
+  popCloseSound.play();
+  popCloseSound.volume = 0.05;
+}
+
+function playFilterSound() {
+  filterSound.currentTime = 0;
+  filterSound.play();
+  filterSound.volume = 0.2;
 }
