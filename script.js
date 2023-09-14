@@ -203,6 +203,7 @@ function showList(arr, targetElement) {
   const plusButtons = document.querySelectorAll(".plus");
   plusButtons.forEach((plusButton) => {
     plusButton.addEventListener("click", (event) => {
+      playFilterSound();
       const idToFind = event.target.getAttribute("data-plus");
       const taskToUpdate = arr.find((task) => task.id == idToFind);
 
@@ -217,6 +218,7 @@ function showList(arr, targetElement) {
   const minusButtons = document.querySelectorAll(".minus");
   minusButtons.forEach((minusButton) => {
     minusButton.addEventListener("click", (event) => {
+      playFilterSound();
       const idToFind = event.target.getAttribute("data-minus");
       const taskToUpdate = arr.find((task) => task.id == idToFind);
 
@@ -315,7 +317,7 @@ function playPopCloseSound() {
 }
 
 function playFilterSound() {
-  filterSound.currentTime = 0;
-  filterSound.play();
-  filterSound.volume = 0.2;
+  const newFilterSound = new Audio((src = "sounds/filterSound.mp4"));
+  newFilterSound.volume = 0.2;
+  newFilterSound.play();
 }
